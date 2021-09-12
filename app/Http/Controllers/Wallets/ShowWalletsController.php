@@ -3,45 +3,50 @@
 namespace App\Http\Controllers\Wallets;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Interfaces\Wallets\ShowWalletInterface;
-use Illuminate\Contracts\View\Factory;
+use App\Interfaces\Currency\ExchangeCurrencyInterface;
+
 
 use Illuminate\Contracts\View\View;
 
 class ShowWalletsController extends Controller
 {
     private ShowWalletInterface $wallet;
+    private ExchangeCurrencyInterface $currency;
 
     public $address;
 
-    public function __construct(ShowWalletInterface $showWalletInterface)
+    public function __construct(ShowWalletInterface $showWalletInterface, ExchangeCurrencyInterface $exchangeCurrencyInterface)
     {
         $this->wallet = $showWalletInterface;
+        $this->currency = $exchangeCurrencyInterface;
     }
 
     public function index(): View
     {
         try {
             $allWallets = $this->wallet->index();
+            $currencyUSD = $this->currency->exchangeCurrency();
         } catch (\Throwable $th) {
             //throw $th;
         }
         return view('wallets.allWallets', [
             'allWallets' => $allWallets,
+            'currencyUSD' => round($currencyUSD, 2),
         ]);
     }
-    public function show($address)
+    public function show($address): View
     {
         try {
-            $wallet_array = $this->wallet->show($address);
+            $walletArray = $this->wallet->show($address);
+            $currencyUSD = $this->currency->exchangeCurrency();
         } catch (\Throwable $th) {
             //throw $th;
         }
         return view('wallets.oneWallet', [
-            'address' => $wallet_array['address'],
-            'amount_of_BTC' => $wallet_array['amount_of_BTC'],
-            'amount_of_USD' => $wallet_array['amount_of_USD']
+            'address' => $walletArray['address'],
+            'amount_of_BTC' => $walletArray['amount_of_BTC'],
+            'amount_of_USD' => round($currencyUSD, 2),
         ]);
     }
 }

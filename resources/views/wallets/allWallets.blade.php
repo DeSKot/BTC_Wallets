@@ -20,7 +20,7 @@
           <tr>
             <th><a href="/wallets/{{$wallet->address}}">{{$wallet->address}}</a></th>
             <th>{{$wallet->amount_of_BTC}}</th>
-            <th>{{$wallet->amount_of_USD}}</th>
+            <th>{{$wallet->amount_of_BTC * $currencyUSD}}</th>
             <th><button type="button" class="btn btn-light"><a href="/wallets/{{$wallet->address}}/transaction">Transaction information</a></button></th>
             @endforeach
         </tbody>

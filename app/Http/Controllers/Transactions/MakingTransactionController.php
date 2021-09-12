@@ -10,7 +10,7 @@ use App\Interfaces\Transactions\MakingTransactionInterface;
 use App\Interfaces\Wallets\ShowWalletInterface;
 use App\Interfaces\Transactions\TransactionRecordInterface;
 use App\Interfaces\Transactions\ShowTransactionInterface;
-
+use Illuminate\Http\RedirectResponse;
 
 class MakingTransactionController extends Controller
 {
@@ -27,7 +27,7 @@ class MakingTransactionController extends Controller
         $this->showTransaction = $showTransactionInterface;
     }
 
-    public function index()
+    public function index(): View
     {
         $allWallets = $this->showWallets->index();
         $allTransactions = $this->showTransaction->index();
@@ -38,18 +38,15 @@ class MakingTransactionController extends Controller
         ]);
     }
 
-    public function transaction(Request $request, Transaction $transaction)
+    public function transaction(Request $request, Transaction $transaction): RedirectResponse
     {
         try {
             $this->makeTransaction->transaction($request->input('myWallet', ''), $request->input('recipientWallet', ''), $request->input('amountOfBTC', ''));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
-        try {
             $this->recordTransaction->create($request->input('myWallet', ''), $request->input('recipientWallet', ''), $request->input('amountOfBTC', ''), $transaction);
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+
         return redirect()->back()->with('success', 'Транзакция успешно завершена');
     }
 }

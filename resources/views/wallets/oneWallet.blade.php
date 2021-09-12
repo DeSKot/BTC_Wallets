@@ -19,7 +19,7 @@
           <tr>
             <th class="align-middle">{{$address}}</th>
             <th class="align-middle">{{$amount_of_BTC}}</th>
-            <th class="align-middle">{{$amount_of_USD}}</th>
+            <th class="align-middle">{{$amount_of_USD * $amount_of_BTC}}</th>
           </tr>
         </tbody>
       </table>

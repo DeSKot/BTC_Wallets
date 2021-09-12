@@ -19,12 +19,12 @@ class ShowWallets implements ShowWalletInterface
 
   public function show($address): array
   {
-    $wallet_array = [
+    $walletArray = [
       'amount_of_BTC' => Wallet::where('address', $address)->value('amount_of_BTC'),
       'amount_of_USD' => Wallet::where('address', $address)->value('amount_of_USD'),
       'address' => $address
     ];
 
-    return $wallet_array;
+    return $walletArray;
   }
 }
