@@ -5,6 +5,8 @@ use App\Http\Controllers\Wallets\CreateWalletController;
 use App\Http\Controllers\Currency\ExchangeCurrencyController;
 use App\Http\Controllers\Wallets\ShowWalletsController;
 use App\Http\Controllers\Transactions\MakingTransactionController;
+use App\Http\Controllers\Transactions\ShowTransactionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +40,11 @@ Route::group(array('before' => 'auth'), function () {
 
     Route::get('/wallets/{address}', [ShowWalletsController::class, 'show'])->name('wallet');
 
-    Route::get('/transaction', [MakingTransactionController::class, 'transaction'])->name('transaction');
+    Route::get('/wallets/{address}/transaction', [ShowTransactionController::class, 'show'])->name('showTransaction');
+
+    Route::get('/transaction', [MakingTransactionController::class, 'index'])->name('indexTransaction');
+
+    Route::post('/transaction', [MakingTransactionController::class, 'transaction'])->name('transaction');
 });
 
 require __DIR__ . '/auth.php';

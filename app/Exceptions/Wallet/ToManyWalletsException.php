@@ -4,6 +4,6 @@ namespace App\Exceptions\Wallet;
 
 use Exception;
 
-class ToManyWalletsExceptions extends Exception{
+class ToManyWalletsException extends Exception{
   
 }

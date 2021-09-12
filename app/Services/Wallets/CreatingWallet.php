@@ -6,7 +6,7 @@ use App\Models\Wallet;
 use App\Interfaces\Wallets\CreateWalletInterface;
 use App\Interfaces\Currency\ExchangeCurrencyInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Exceptions\Wallet\ToManyWalletsException;
 
 class CreatingWallet implements CreateWalletInterface
 {
@@ -25,7 +25,7 @@ class CreatingWallet implements CreateWalletInterface
     $countOfWallets = count(Wallet::where('id_of_user', '=', $userID)->get());
     $exchangeCurrencyToUSD = $this->exchange->exchangeCurrency()['ticker']['price'];
 
-    throw_if($countOfWallets >= 10, ToManyWalletsExceptions::class, 'У вас слишком много кошельков, дозволено максимум 10');
+    throw_if($countOfWallets >= 10, ToManyWalletsException::class, 'У вас слишком много кошельков, дозволено максимум 10');
 
     $wallet->amount_of_BTC = 1;
     $wallet->amount_of_USD = $exchangeCurrencyToUSD;

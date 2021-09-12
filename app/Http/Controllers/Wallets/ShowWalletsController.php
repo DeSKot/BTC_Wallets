@@ -31,7 +31,7 @@ class ShowWalletsController extends Controller
             'allWallets' => $allWallets,
         ]);
     }
-    public function show($address): View
+    public function show($address)
     {
         try {
             $wallet_array = $this->wallet->show($address);
@@ -39,9 +39,9 @@ class ShowWalletsController extends Controller
             //throw $th;
         }
         return view('wallets.oneWallet', [
-            'address' => $wallet_array[3],
-            'amount_of_BTC' => $wallet_array[1],
-            'amount_of_USD' => $wallet_array[2]
+            'address' => $wallet_array['address'],
+            'amount_of_BTC' => $wallet_array['amount_of_BTC'],
+            'amount_of_USD' => $wallet_array['amount_of_USD']
         ]);
     }
 }

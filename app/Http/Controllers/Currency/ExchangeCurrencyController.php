@@ -15,10 +15,10 @@ class ExchangeCurrencyController extends Controller
         $this->exchange = $exchangeCurrencyInterface;
     }
 
-    public function exchangeCurrency()
+    public function exchangeCurrency():mixed
     {
 
-        $arrayExchangeCurrency = $this->exchange->exchangeCurrency()['ticker']['price'];
+        $arrayExchangeCurrency = $this->exchange->exchangeCurrency();
 
         return $arrayExchangeCurrency;
     }

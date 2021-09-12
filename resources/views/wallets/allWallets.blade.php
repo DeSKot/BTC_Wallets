@@ -21,9 +21,8 @@
             <th><a href="/wallets/{{$wallet->address}}">{{$wallet->address}}</a></th>
             <th>{{$wallet->amount_of_BTC}}</th>
             <th>{{$wallet->amount_of_USD}}</th>
-            <th><button type="button" class="btn btn-outline-light"><a href="{{ route('transaction') }}">Send many</a></button></th>
-          </tr>
-          @endforeach
+            <th><button type="button" class="btn btn-light"><a href="/wallets/{{$wallet->address}}/transaction">Transaction information</a></button></th>
+            @endforeach
         </tbody>
       </table>
     </div>

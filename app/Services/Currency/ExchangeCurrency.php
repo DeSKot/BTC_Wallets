@@ -21,6 +21,6 @@ class ExchangeCurrency implements ExchangeCurrencyInterface
     $conversionResult = json_decode($json, true);
 
     // access the conversion result
-    return $conversionResult;
+    return $conversionResult['ticker']['price'];
   }
 }
