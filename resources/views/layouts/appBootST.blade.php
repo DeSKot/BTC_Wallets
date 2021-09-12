@@ -15,8 +15,8 @@
 </head>
 
 <body>
-
-@yield('content')
+  @include('layouts.navigationBootST')
+  @yield('content')
 
 
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.js"></script>

@@ -34,8 +34,6 @@ Route::group(array('before' => 'auth'), function () {
 
     Route::get('/create_wallet', [CreateWalletController::class, 'create'])->name('create_wallet');
 
-    Route::get('/currency', [ExchangeCurrencyController::class, 'exchangeCurrency'])->name('currency');
-
     Route::get('/wallets', [ShowWalletsController::class, 'index'])->name('wallets');
 
     Route::get('/wallets/{address}', [ShowWalletsController::class, 'show'])->name('wallet');

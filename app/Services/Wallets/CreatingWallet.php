@@ -23,7 +23,7 @@ class CreatingWallet implements CreateWalletInterface
   {
     $userID = Auth::user()->id;
     $countOfWallets = count(Wallet::where('id_of_user', '=', $userID)->get());
-    $exchangeCurrencyToUSD = $this->exchange->exchangeCurrency()['ticker']['price'];
+    $exchangeCurrencyToUSD = $this->exchange->exchangeCurrency();
 
     throw_if($countOfWallets >= 10, ToManyWalletsException::class, 'У вас слишком много кошельков, дозволено максимум 10');
 
