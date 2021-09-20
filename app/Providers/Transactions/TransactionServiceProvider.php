@@ -5,8 +5,8 @@ namespace App\Providers\Transactions;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\Transactions\MakingTransactionInterface;
 use App\Services\Transactions\MakingTransaction;
-use App\Interfaces\Transactions\ShowTransactionInterface;
-use App\Services\Transactions\ShowTransactions;
+use App\Interfaces\Transactions\TransactionInterface;
+use App\Services\Transactions\TransactionService;
 
 class TransactionServiceProvider extends ServiceProvider
 {
@@ -31,7 +31,6 @@ class TransactionServiceProvider extends ServiceProvider
     }
 
     public $singletons = [
-        MakingTransactionInterface::class => MakingTransaction::class,
-        ShowTransactionInterface::class => ShowTransactions::class
+        TransactionInterface::class => TransactionService::class
     ];
 }

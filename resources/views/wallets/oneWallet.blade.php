@@ -6,11 +6,12 @@
 
 <div class="conteiner">
   <div class="row align-middle">
-    <div class="col-lg-6 ">
+    <div class="col-lg-12 ">
       <table class="table">
         <thead>
           <tr>
             <th class="align-middle">Address</th>
+            <th class="align-middle">Amount in Satoshi</th>
             <th class="align-middle">Amount in BTC</th>
             <th class="align-middle">Amount in USD</th>
           </tr>
@@ -18,8 +19,9 @@
         <tbody>
           <tr>
             <th class="align-middle">{{$address}}</th>
-            <th class="align-middle">{{$amount_of_BTC}}</th>
-            <th class="align-middle">{{$amount_of_USD * $amount_of_BTC}}</th>
+            <th class="align-middle">{{$amountOfSatoshi}}</th>
+            <th class="align-middle">{{$amountOfBtc}}</th>
+            <th class="align-middle">{{$amountOfUsd}}</th>
           </tr>
         </tbody>
       </table>

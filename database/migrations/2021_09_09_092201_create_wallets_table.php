@@ -15,10 +15,9 @@ class CreateWalletsTable extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->string('amount_of_BTC');
-            $table->string('amount_of_USD');
-            $table->string('address');
-            $table->float('id_of_user');
+            $table->bigInteger('amount_of_satoshi');
+            $table->string('address')->unique();
+            $table->bigInteger('id_of_user');
             $table->timestamps();
         });
     }

@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Wallets\CreateWalletController;
-use App\Http\Controllers\Currency\ExchangeCurrencyController;
-use App\Http\Controllers\Wallets\ShowWalletsController;
-use App\Http\Controllers\Transactions\MakingTransactionController;
-use App\Http\Controllers\Transactions\ShowTransactionController;
+use App\Http\Controllers\Wallets\WalletController;
+use App\Http\Controllers\Transactions\TransactionController;
+use App\Http\Controllers\Wallets\WalletTransactionController;
 
 
 /*
@@ -32,17 +30,19 @@ Route::group(array('before' => 'auth'), function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/create_wallet', [CreateWalletController::class, 'create'])->name('create_wallet');
+    Route::get('/create_wallet', [WalletController::class, 'create'])->name('create_wallet');
 
-    Route::get('/wallets', [ShowWalletsController::class, 'index'])->name('wallets');
+    Route::get('/wallets', [WalletController::class, 'index'])->name('wallets');
 
-    Route::get('/wallets/{address}', [ShowWalletsController::class, 'show'])->name('wallet');
+    Route::get('/wallets/test', [WalletController::class, 'test'])->name('test');
 
-    Route::get('/wallets/{address}/transaction', [ShowTransactionController::class, 'show'])->name('showTransaction');
+    Route::get('/wallets/{address}', [WalletController::class, 'show'])->name('wallet');
 
-    Route::get('/transaction', [MakingTransactionController::class, 'index'])->name('indexTransaction');
+    Route::get('/wallets/{address}/transaction', [TransactionController::class, 'show'])->name('showTransaction');
 
-    Route::post('/transaction', [MakingTransactionController::class, 'transaction'])->name('transaction');
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('indexTransaction');
+
+    Route::post('/transaction', [WalletTransactionController::class, 'transaction'])->name('transaction');
 });
 
 require __DIR__ . '/auth.php';

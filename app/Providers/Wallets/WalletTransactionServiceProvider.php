@@ -3,10 +3,10 @@
 namespace App\Providers\Wallets;
 
 use Illuminate\Support\ServiceProvider;
-use App\Interfaces\Wallets\ShowWalletInterface;
-use App\Services\Wallets\ShowWallets;
+use App\Interfaces\Wallets\WalletTransactionInterface;
+use App\Services\Wallets\WalletTransaction;
 
-class ShowWalletsServiceProvider extends ServiceProvider
+class WalletTransactionServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -29,6 +29,6 @@ class ShowWalletsServiceProvider extends ServiceProvider
     }
 
    public  $singletons = [
-        ShowWalletInterface::class => ShowWallets::class,
+        WalletTransactionInterface::class => WalletTransaction::class,
    ];
 }

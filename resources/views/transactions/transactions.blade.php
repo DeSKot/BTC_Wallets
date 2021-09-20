@@ -33,7 +33,7 @@
           <input type="text" class="form-control" id="formGroupExampleInput" name="recipientWallet">
         </div>
         <div class="mb-3 mt-2">
-          <label for="formGroupExampleInput" class="form-label">Amount of BTC</label>
+          <label for="formGroupExampleInput" class="form-label">Amount of Satoshi</label>
           <input type="number" class="form-control" id="formGroupExampleInput" name="amountOfBTC">
         </div>
         <div class="col-auto mt-2">

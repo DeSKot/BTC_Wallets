@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\Transaction\CannotSendToTheSameWalletException;
+use App\Exceptions\Wallet\ToManyWalletsException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,6 +38,9 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+        $this->reportable(function (ToManyWalletsException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         });
     }
 }

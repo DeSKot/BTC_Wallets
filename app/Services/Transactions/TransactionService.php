@@ -2,11 +2,11 @@
 
 namespace App\Services\Transactions;
 
-use App\Interfaces\Transactions\ShowTransactionInterface;
+use App\Interfaces\Transactions\TransactionInterface;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 
-class ShowTransactions implements ShowTransactionInterface
+class TransactionService implements TransactionInterface
 {
 
   public function index(): mixed

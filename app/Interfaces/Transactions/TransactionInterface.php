@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Transactions;
 
-interface ShowTransactionInterface
+interface TransactionInterface
 {
    public function index(): mixed;
 

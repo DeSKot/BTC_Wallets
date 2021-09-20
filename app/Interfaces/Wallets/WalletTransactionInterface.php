@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Interfaces\Transactions;
+namespace App\Interfaces\Wallets;
 
-interface MakingTransactionInterface {
+interface WalletTransactionInterface {
   public function transaction(string $myWallet, string $recipientWallet, string $amountOfBTC): void;
 }

@@ -3,10 +3,10 @@
 namespace App\Providers\Wallets;
 
 use Illuminate\Support\ServiceProvider;
-use App\Interfaces\Wallets\CreateWalletInterface;
-use App\Services\Wallets\CreatingWallet;
+use App\Interfaces\Wallets\WalletInterface;
+use App\Services\Wallets\WalletService;
 
-class CreateWalletServiceProvider extends ServiceProvider
+class WalletServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -27,7 +27,8 @@ class CreateWalletServiceProvider extends ServiceProvider
     {
         //
     }
-     public $singletons = [
-        CreateWalletInterface::class => CreatingWallet::class,
-     ];
+
+    public $singletons = [
+        WalletInterface::class => WalletService::class,
+    ];
 }

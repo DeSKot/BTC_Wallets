@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Spatie\Permission\Models\Permission;
+
 class RegisteredUserController extends Controller
 {
 
@@ -44,17 +45,13 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'amount_of_wallet' => '0',
+            'amount_of_wallet' => 0,
         ]);
-
-        $user->givePermissionTo('create wallet');
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME,[
-
-        ]);
+        return redirect(RouteServiceProvider::HOME);
     }
 }

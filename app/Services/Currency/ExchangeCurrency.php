@@ -3,24 +3,20 @@
 namespace App\Services\Currency;
 
 use App\Interfaces\Currency\ExchangeCurrencyInterface;
+use GuzzleHttp\Client;
 
 class ExchangeCurrency implements ExchangeCurrencyInterface
 {
 
   public function exchangeCurrency(): mixed
   {
-    // initialize CURL:
-    $ch = curl_init('https://api.cryptonator.com/api/ticker/btc-usd');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $client = new Client([
+      'base_uri' => 'https://api.cryptonator.com/api/ticker/btc-usd',
+    ]);
 
-    // get the (still encoded) JSON data:
-    $json = curl_exec($ch);
-    curl_close($ch);
+    $response = $client->request('GET')->getBody();
 
-    // Decode JSON response:
-    $conversionResult = json_decode($json, true);
-
-    // access the conversion result
-    return $conversionResult['ticker']['price'];
+    $json = json_decode($response, true);
+    return $json['ticker']['price'];
   }
 }

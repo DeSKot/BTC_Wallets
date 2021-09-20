@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Currency;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Interfaces\Currency\ExchangeCurrencyInterface;
 
 class ExchangeCurrencyController extends Controller
 {
-    private ExchangeCurrencyInterface $exchange;
+    private ExchangeCurrencyInterface $exchangeCurrency;
 
     public function __construct(ExchangeCurrencyInterface $exchangeCurrencyInterface)
     {
-        $this->exchange = $exchangeCurrencyInterface;
+        $this->exchangeCurrency = $exchangeCurrencyInterface;
     }
 
     public function exchangeCurrency():mixed
     {
 
-        $arrayExchangeCurrency = $this->exchange->exchangeCurrency();
+        $arrayExchangeCurrency = $this->exchangeCurrency->exchangeCurrency();
 
         return $arrayExchangeCurrency;
     }
