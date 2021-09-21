@@ -45,7 +45,7 @@ class WalletController extends Controller
             'address' => $walletArray['address'],
             'amountOfSatoshi' => $walletArray['amountOfSatoshi'],
             'amountOfUsd' => $walletArray['amountOfUsd'],
-            'amountOfBtc' => $walletArray ['amountOfBtc']
+            'amountOfBtc' => $walletArray['amountOfBtc']
         ]);
     }
 
