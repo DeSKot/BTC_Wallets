@@ -6,7 +6,7 @@
 
 <div class="conteiner">
   <div class="row text-center">
-    <div class="col-lg-6">
+    <div class="col-lg-12">
       <table class="table">
         <thead>
           <tr>

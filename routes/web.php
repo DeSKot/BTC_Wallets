@@ -34,8 +34,6 @@ Route::group(array('before' => 'auth'), function () {
 
     Route::get('/wallets', [WalletController::class, 'index'])->name('wallets');
 
-    Route::get('/wallets/test', [WalletController::class, 'test'])->name('test');
-
     Route::get('/wallets/{address}', [WalletController::class, 'show'])->name('wallet');
 
     Route::get('/wallets/{address}/transaction', [TransactionController::class, 'show'])->name('showTransaction');

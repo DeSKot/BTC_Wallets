@@ -19,7 +19,7 @@ class WalletTransaction implements WalletTransactionInterface
     throw_unless(Wallet::where('address', $recipientWallet)->value('address'), InvalidAddressException::class, 'Не коректный адрес кошелька получателя');
 
     $percent = $amountOfBTC * 0.15 + $amountOfBTC;
-    $wallets = Wallet::whereIn('address', [$myWallet, $recipientWallet])->get();
+    $wallets = Wallet::whereIn('address', [$myWallet, $recipientWallet])->sharedLock()->get();
     $myWalletData = $wallets[0];
     $recipientWalletData = $wallets[1];
 
