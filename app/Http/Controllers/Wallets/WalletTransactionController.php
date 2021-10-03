@@ -20,19 +20,19 @@ class WalletTransactionController extends Controller
         $this->wallet = $walletInterface;
         $this->recordTransaction = $transactionRecordInterface;
     }
-    public function transaction(Request $request, Transaction $transaction): RedirectResponse
+    public function transactionInDB(Request $request, Transaction $transaction): RedirectResponse
     {
         $myWallet = $request->input('myWallet', '');
         $recipientWallet = $request->input('recipientWallet', '');
         $amountOfBTC = $request->input('amountOfBTC', '');
 
         try {
-            $this->wallet->transaction($myWallet, $recipientWallet, $amountOfBTC);
+            $this->wallet->transactionInDB($myWallet, $recipientWallet, $amountOfBTC);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
 
-        $this->recordTransaction->create($myWallet, $recipientWallet, $amountOfBTC, $transaction);
+        $this->recordTransaction->createInDB($myWallet, $recipientWallet, $amountOfBTC, $transaction);
 
         return redirect()->back()->with('success', 'Транзакция успешно завершена');
     }

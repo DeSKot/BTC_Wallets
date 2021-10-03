@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionRecord implements TransactionRecordInterface
 {
-  public function create(string $myWallet, string $recipientWallet, string $amountOfBTC, Transaction $transaction):void
+  public function createInDB(string $myWallet, string $recipientWallet, string $amountOfBTC, Transaction $transaction):void
   {
     $transaction->sender = $myWallet;
     $transaction->recipient = $recipientWallet;

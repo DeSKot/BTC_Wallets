@@ -22,13 +22,9 @@ class WalletService implements WalletInterface
 
   public function index(): mixed
   {
-    $allWallets =  Wallet::where('id_of_user', Auth::user()->id)->get();
-
-    return $allWallets;
+    return Wallet::where('user_id', Auth::user()->id)->get();
   }
-
-
-
+  
   public function show($address): array
   {
     $currencyUSD = $this->exchangeCurrency->exchangeCurrency();
@@ -51,12 +47,12 @@ class WalletService implements WalletInterface
   public function create(Wallet $wallet): void
   {
     $userID = Auth::user()->id;
-    $countOfWallets = count(Wallet::where('id_of_user', '=', $userID)->get());
+    $countOfWallets = count(Wallet::where('user_id', '=', $userID)->get());
 
     throw_if($countOfWallets >= 10, ToManyWalletsException::class, 'У вас слишком много кошельков, дозволено максимум 10');
 
     $wallet->amount_of_satoshi = 100000000;
-    $wallet->id_of_user = $userID;
+    $wallet->user_id = $userID;
     $wallet->address = Uuid::uuid4();
 
     $wallet->save();

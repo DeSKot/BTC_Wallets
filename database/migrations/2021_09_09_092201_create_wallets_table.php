@@ -17,7 +17,7 @@ class CreateWalletsTable extends Migration
             $table->id();
             $table->bigInteger('amount_of_satoshi');
             $table->string('address')->unique();
-            $table->bigInteger('id_of_user');
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }

@@ -11,16 +11,11 @@ class TransactionService implements TransactionInterface
 
   public function index(): mixed
   {
-    $allTransactions = Transaction::where('sender_Id', Auth::user()->id)->get();;
-
-    return $allTransactions;
+    return Transaction::where('sender_Id', Auth::user()->id)->get();
   }
 
   public function show($address): mixed
   {
-
-    $walletTransactions = Transaction::where('sender', $address)->get();
-
-    return $walletTransactions;
+   return Transaction::where('sender', $address)->get();
   }
 }

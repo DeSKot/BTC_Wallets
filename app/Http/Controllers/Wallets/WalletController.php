@@ -26,14 +26,12 @@ class WalletController extends Controller
 
     public function index(): View
     {
-        $allWallets = $this->wallet->index();
-        $currencyUSD = $this->exchangeCurrency->exchangeCurrency();
-
         return view('wallets.allWallets', [
-            'allWallets' => $allWallets,
-            'currencyUSD' => $currencyUSD,
+            'allWallets' => $this->wallet->index(),
+            'currencyUSD' => $this->exchangeCurrency->exchangeCurrency(),
         ]);
     }
+
 
 
 
@@ -54,7 +52,6 @@ class WalletController extends Controller
     public function create(Wallet $wallet): RedirectResponse
     {
         $this->wallet->create($wallet);
-
         return redirect()->back()->with('Success', 'Кошелек успешно создан');
     }
 }

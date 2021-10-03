@@ -40,7 +40,7 @@ Route::group(array('before' => 'auth'), function () {
 
     Route::get('/transaction', [TransactionController::class, 'index'])->name('indexTransaction');
 
-    Route::post('/transaction', [WalletTransactionController::class, 'transaction'])->name('transaction');
+    Route::post('/transaction', [WalletTransactionController::class, 'transactionInDB'])->name('transaction');
 });
 
 require __DIR__ . '/auth.php';
