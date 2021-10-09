@@ -4,7 +4,7 @@ namespace App\Interfaces\Wallets;
 
 use App\Models\Wallet;
 
-interface WalletInterface {
+interface WalletServiceInterface {
   public function index(): mixed ;
 
   public function show($address): array ;

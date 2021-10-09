@@ -20,7 +20,7 @@ class WalletTransactionTest extends TestCase
         parent::setUp();
         Artisan::call('migrate');
         Artisan::call('db:seed');
-        $this->senderWallet = Wallet::factory()->create();
+        $this->senderWallet      = Wallet::factory()->create();
         $this->walletTransaction = new WalletTransaction();
     }
     /**
@@ -32,11 +32,11 @@ class WalletTransactionTest extends TestCase
             'user_id' => 1
         ]);
         // Variables for test
-        $satoshiAmount = 11111;
-        $senderAddress = $this->senderWallet->address;
-        $resepientAddress = $resepientWallet->address;
+        $satoshiAmount           = 11111;
+        $senderAddress           = $this->senderWallet->address;
+        $resepientAddress        = $resepientWallet->address;
          //Make calculation of Fake Wallet
-        $changeAmoundOfSender = $this->senderWallet->amount_of_satoshi - $satoshiAmount;
+        $changeAmoundOfSender    = $this->senderWallet->amount_of_satoshi - $satoshiAmount;
         $changeAmountOfResepient = $resepientWallet->amount_of_satoshi + $satoshiAmount;
          // Call  transaction method
         $this->walletTransaction->transactionInDB($senderAddress,$resepientAddress,$satoshiAmount);
@@ -51,12 +51,12 @@ class WalletTransactionTest extends TestCase
      */
     public function test_transactionInDb_makeTransactionWalletOnAnotherUser_saveChanges()
     {   
-        $resepientWallet = Wallet::factory()->create();
+        $resepientWallet         = Wallet::factory()->create();
         // Variables for test
-        $satoshiAmount = 11111;
-        $percent = $satoshiAmount * 0.15 + $satoshiAmount;
+        $satoshiAmount           = 11111;
+        $percent                 = $satoshiAmount * 0.15 + $satoshiAmount;
          //Make calculation of Fake Wallet
-        $changeAmoundOfSender = $this->senderWallet->amount_of_satoshi - $satoshiAmount + $percent;
+        $changeAmoundOfSender    = $this->senderWallet->amount_of_satoshi - $satoshiAmount + $percent;
         $changeAmountOfResepient = $resepientWallet->amount_of_satoshi + $satoshiAmount;
          // Call  transactionInDB method
         $this->walletTransaction->transactionInDB($this->senderWallet->address,$resepientWallet->address,$satoshiAmount);

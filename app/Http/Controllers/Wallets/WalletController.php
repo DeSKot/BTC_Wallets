@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Wallets;
 
 use App\Http\Controllers\Controller;
-use App\Interfaces\Wallets\WalletInterface;
-use App\Interfaces\Currency\ExchangeCurrencyInterface;
+use App\Interfaces\Wallets\WalletServiceInterface;
+use App\Interfaces\Currency\ExchangeCurrencyServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use App\Models\Wallet;
@@ -14,12 +14,12 @@ use App\Models\Wallet;
 
 class WalletController extends Controller
 {
-    private WalletInterface $wallet;
-    private ExchangeCurrencyInterface $exchangeCurrency;
+    private WalletServiceInterface $walletService;
+    private ExchangeCurrencyServiceInterface $exchangeCurrency;
 
-    public function __construct(WalletInterface $walletInterface, ExchangeCurrencyInterface $exchangeCurrencyInterface)
+    public function __construct(WalletServiceInterface $walletServiceInterface, ExchangeCurrencyServiceInterface $exchangeCurrencyInterface)
     {
-        $this->wallet = $walletInterface;
+        $this->walletService = $walletServiceInterface;
         $this->exchangeCurrency = $exchangeCurrencyInterface;
     }
 
@@ -27,17 +27,14 @@ class WalletController extends Controller
     public function index(): View
     {
         return view('wallets.allWallets', [
-            'allWallets' => $this->wallet->index(),
+            'allWallets' => $this->walletService->index(),
             'currencyUSD' => $this->exchangeCurrency->exchangeCurrency(),
         ]);
     }
 
-
-
-
     public function show($address): View
     {
-        $walletArray = $this->wallet->show($address);
+        $walletArray = $this->walletService->show($address);
 
         return view('wallets.oneWallet', [
             'address' => $walletArray['address'],
@@ -47,11 +44,13 @@ class WalletController extends Controller
         ]);
     }
 
-
-
     public function create(Wallet $wallet): RedirectResponse
     {
-        $this->wallet->create($wallet);
+        try {
+            $this->walletService->create($wallet);
+        } catch (\Throwable $th) {
+             return redirect()->back()->with('Error', $th->getMessage());
+        }
         return redirect()->back()->with('Success', 'Кошелек успешно создан');
     }
 }

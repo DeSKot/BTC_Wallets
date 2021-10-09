@@ -2,13 +2,13 @@
 
 namespace App\Services\Currency;
 
-use App\Interfaces\Currency\ExchangeCurrencyInterface;
+use App\Interfaces\Currency\ExchangeCurrencyServiceInterface;
 use GuzzleHttp\Client;
 
-class ExchangeCurrency implements ExchangeCurrencyInterface
+class ExchangeCurrencyService implements ExchangeCurrencyServiceInterface
 {
 
-  public function exchangeCurrency(): mixed
+  public function exchangeCurrency(): float
   {
     $client = new Client([
       'base_uri' => 'https://api.cryptonator.com/api/ticker/btc-usd',

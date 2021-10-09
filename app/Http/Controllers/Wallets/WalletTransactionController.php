@@ -12,13 +12,13 @@ use App\Interfaces\Transactions\TransactionRecordInterface;
 class WalletTransactionController extends Controller
 {
 
-    private WalletTransactionInterface $wallet;
-    private TransactionRecordInterface $recordTransaction;
+    private WalletTransactionInterface $walletTransaction;
+    private TransactionRecordInterface $transactionRecord;
 
     public function __construct(WalletTransactionInterface $walletInterface, TransactionRecordInterface $transactionRecordInterface)
     {
-        $this->wallet = $walletInterface;
-        $this->recordTransaction = $transactionRecordInterface;
+        $this->walletTransaction = $walletInterface;
+        $this->transactionRecord = $transactionRecordInterface;
     }
     public function transactionInDB(Request $request, Transaction $transaction): RedirectResponse
     {
@@ -27,12 +27,12 @@ class WalletTransactionController extends Controller
         $amountOfBTC = $request->input('amountOfBTC', '');
 
         try {
-            $this->wallet->transactionInDB($myWallet, $recipientWallet, $amountOfBTC);
+            $this->walletTransaction->transactionInDB($myWallet, $recipientWallet, $amountOfBTC);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
 
-        $this->recordTransaction->createInDB($myWallet, $recipientWallet, $amountOfBTC, $transaction);
+        $this->transactionRecord->createInDB($myWallet, $recipientWallet, $amountOfBTC, $transaction);
 
         return redirect()->back()->with('success', 'Транзакция успешно завершена');
     }

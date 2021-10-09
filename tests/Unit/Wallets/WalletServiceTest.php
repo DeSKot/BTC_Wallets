@@ -6,7 +6,7 @@ use App\Models\Wallet;
 use App\Services\Wallets\WalletService;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
-use App\Interfaces\Currency\ExchangeCurrencyInterface;
+use App\Interfaces\Currency\ExchangeCurrencyServiceInterface;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\User;
 
@@ -16,11 +16,10 @@ class WalletServiceTest extends TestCase
      public function setUp():void
      {
         parent::setUp();
-        
         Artisan::call('migrate');
         Artisan::call('db:seed');
-        $this->exchangeCurrencyMock = \Mockery::mock(ExchangeCurrencyInterface::class);
-        $this->wallet = new WalletService($this->exchangeCurrencyMock);
+        $this->exchangeCurrencyMock = \Mockery::mock(ExchangeCurrencyServiceInterface::class);
+        $this->wallet               = new WalletService($this->exchangeCurrencyMock);
     }
     /**
      * @return void
@@ -40,7 +39,7 @@ class WalletServiceTest extends TestCase
         Wallet::factory()->create();
 
         $expectedResult = app(Wallet::class)->where('user_id', $auth->id)->get();
-        $testMethod = $this->wallet->index();
+        $testMethod     = $this->wallet->index();
 
         $this->assertEquals($expectedResult, $testMethod);
     }
@@ -51,16 +50,16 @@ class WalletServiceTest extends TestCase
     public function test_show_oneInfoAboutOneUserWallet_assertEquals(){
         $this->exchangeCurrencyMock->shouldReceive('exchangeCurrency')->once()->andReturn(123456);
         $adrress = '7c88c513-8898-4619-8ff8-3945a02ccba6';
-        $wallet = Wallet::factory()->create ([
+        $wallet  = Wallet::factory()->create ([
             'address' => $adrress,
         ]);
         $amountOfBTC = ((100 / 100000000) *  $wallet->amount_of_satoshi) / 100;
 
-        $testWallet = [
+        $testWallet  = [
             'amountOfSatoshi' => $wallet->amount_of_satoshi,
-            'amountOfBtc' => $amountOfBTC,
-            'amountOfUsd' => $amountOfBTC * 123456,
-            'address' => $adrress,
+            'amountOfBtc'     => $amountOfBTC,
+            'amountOfUsd'     => $amountOfBTC * 123456,
+            'address'         => $adrress,
         ];
 
         $walletArray = $this->wallet->show($adrress);

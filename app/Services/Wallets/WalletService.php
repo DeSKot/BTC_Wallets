@@ -2,19 +2,20 @@
 
 namespace App\Services\Wallets;
 
-use App\Interfaces\Wallets\WalletInterface;
-use App\Interfaces\Currency\ExchangeCurrencyInterface;
+use App\Interfaces\Wallets\WalletServiceInterface;
+use App\Interfaces\Currency\ExchangeCurrencyServiceInterface;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 use App\Exceptions\Wallet\ToManyWalletsException;
+use App\Interfaces\Currency\ExchangeCurrencyInterface;
 use Ramsey\Uuid\Uuid;
 
-class WalletService implements WalletInterface
+class WalletService implements WalletServiceInterface
 {
 
-  private ExchangeCurrencyInterface $exchangeCurrency;
+  private ExchangeCurrencyServiceInterface $exchangeCurrency;
 
-  public function __construct(ExchangeCurrencyInterface $exchangeCurrencyInterface)
+  public function __construct(ExchangeCurrencyServiceInterface $exchangeCurrencyInterface)
   {
     $this->exchangeCurrency = $exchangeCurrencyInterface;
   }
@@ -32,15 +33,12 @@ class WalletService implements WalletInterface
     $amountOfBtc = ((100 / 100000000) * $amountOfSatoshi) / 100;
     $amountOfUsd = $amountOfBtc * $currencyUSD;
 
-
-    $walletArray = [
+    return  [
       'amountOfSatoshi' => $amountOfSatoshi,
       'amountOfUsd' => $amountOfUsd,
       'amountOfBtc' => $amountOfBtc,
       'address' => $address
     ];
-
-    return $walletArray;
   }
 
 

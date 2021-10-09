@@ -39,8 +39,5 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
-        $this->reportable(function (ToManyWalletsException $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        });
     }
 }

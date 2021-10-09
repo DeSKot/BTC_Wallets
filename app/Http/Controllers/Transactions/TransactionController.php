@@ -3,39 +3,34 @@
 namespace App\Http\Controllers\Transactions;
 
 use App\Http\Controllers\Controller;
-use App\Interfaces\Transactions\TransactionInterface;
-use App\Interfaces\Wallets\WalletInterface;
+use App\Interfaces\Transactions\TransactionServiceInterface;
+use App\Interfaces\Wallets\WalletServiceInterface;
 use Illuminate\Contracts\View\View;
 
 class TransactionController extends Controller
 {
 
-    private TransactionInterface $transaction;
-    private WalletInterface $wallet;
+    private TransactionServiceInterface $transactionService;
+    private WalletServiceInterface $walletService;
 
-    public function __construct(TransactionInterface $transactionInterface, WalletInterface $walletInterface)
+    public function __construct(TransactionServiceInterface $transactionInterface, WalletServiceInterface $walletServiceInterface)
     {
-        $this->transaction = $transactionInterface;
-        $this->wallet = $walletInterface;
+        $this->transactionService = $transactionInterface;
+        $this->walletService = $walletServiceInterface;
     }
 
     public function index(): View
     {
-        $allWallets = $this->wallet->index();
-        $allTransactions = $this->transaction->index();
-
         return view('transactions.transactions', [
-            'allWallets' => $allWallets,
-            'allTransactions' => $allTransactions
+            'allWallets' => $this->walletService->index(),
+            'allTransactions' => $this->transactionService->index()
         ]);
     }
 
     public function show($address): View
     {
-        $walletTransactions = $this->transaction->show($address);
-
         return view('transactions.showTransactions', [
-            'walletTransactions' => $walletTransactions,
+            'walletTransactions' => $this->transactionService->show($address),
         ]);
     }
 }

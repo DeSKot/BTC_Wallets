@@ -3,8 +3,8 @@
 namespace App\Providers\Currency;
 
 use Illuminate\Support\ServiceProvider;
-use App\Interfaces\Currency\ExchangeCurrencyInterface;
-use App\Services\Currency\ExchangeCurrency;
+use App\Interfaces\Currency\ExchangeCurrencyServiceInterface;
+use App\Services\Currency\ExchangeCurrencyService;
 
 class CurrencyServiceProvider extends ServiceProvider
 {
@@ -29,6 +29,6 @@ class CurrencyServiceProvider extends ServiceProvider
     }
 
     public $singletons = [
-        ExchangeCurrencyInterface::class => ExchangeCurrency::class
+        ExchangeCurrencyServiceInterface::class => ExchangeCurrencyService::class
     ];
 }

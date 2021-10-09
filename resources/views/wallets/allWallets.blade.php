@@ -24,6 +24,7 @@
             <th>{{((100/100000000) * $wallet->amount_of_satoshi) / 100}}</th>
             <th>{{((100/100000000) * $wallet->amount_of_satoshi) / 100 * $currencyUSD}}</th>
             <th><button type="button" class="btn btn-light"><a href="/wallets/{{$wallet->address}}/transaction">Transaction information</a></button></th>
+          </tr>
             @endforeach
         </tbody>
       </table>

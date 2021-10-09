@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Currency;
 
-interface ExchangeCurrencyInterface
+interface ExchangeCurrencyServiceInterface
 {
   public function exchangeCurrency(): mixed;
 }
