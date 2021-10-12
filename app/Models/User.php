@@ -24,6 +24,16 @@ class User extends Authenticatable
     ];
 
     /**
+     * The attributes that aren't mass assignable.
+     *sv@sc.com
+     * @var array
+     */
+    protected $quarded = [
+        'email',
+        'password',
+    ];
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array

@@ -9,12 +9,15 @@ use App\Interfaces\Transactions\TransactionServiceInterface;
 use App\Interfaces\Wallets\WalletServiceInterface;
 use App\Http\Controllers\Transactions\TransactionController;
 use Tests\TestCase;
+use Tests\TestAuthCase;
 
 class TransactionControllerTest extends TestCase
 {
-    public function setUp():void{
+    public function setUp():void
+    {
         parent::setUp();
 
+        $this->testAuth                  = new TestAuthCase;
         $this->transactionServiceMock    = $this->createMock(TransactionServiceInterface::class);
         $this->waletServiceMock          = $this->createMock(WalletServiceInterface::class);
         $this->transactionControllerMock = new TransactionController($this->transactionServiceMock,$this->waletServiceMock);
@@ -25,16 +28,8 @@ class TransactionControllerTest extends TestCase
     public function test_indexTransactionController()
     {
         ob_end_flush();
-        
-        $auth = new class {
-            public $id;
-            public function __construct()
-            {
-                $this->id = 1;
-            }
-        };
 
-        Auth::shouldReceive('user')->andReturn($auth);
+        Auth::shouldReceive('user')->andReturn($this->testAuth);
         //test. route name is real
         $response = $this->get('/transaction');
         $response->assertStatus(200);
@@ -81,7 +76,8 @@ class TransactionControllerTest extends TestCase
         /**
      * @return void
      */
-    public function test_showTransactionController(){
+    public function test_showTransactionController()
+    {
         ob_end_flush();
         //test, check call methode show in method show TransactionController
         $this->transactionServiceMock->expects($this->once())->method('show');

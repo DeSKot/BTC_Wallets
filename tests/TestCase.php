@@ -3,8 +3,6 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabaseState;
-
-
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -12,4 +10,5 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication, DatabaseMigrations, RefreshDatabase;
+
 }

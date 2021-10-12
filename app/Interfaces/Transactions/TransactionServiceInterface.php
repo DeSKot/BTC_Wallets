@@ -2,9 +2,11 @@
 
 namespace App\Interfaces\Transactions;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface TransactionServiceInterface
 {
-   public function index(): mixed;
+   public function index(): Collection;
 
-   public function show($addres): mixed;
+   public function show($addres): Collection;
 }

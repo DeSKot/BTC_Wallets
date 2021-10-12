@@ -9,14 +9,13 @@ use Illuminate\Contracts\View\View;
 
 class TransactionController extends Controller
 {
-
     private TransactionServiceInterface $transactionService;
     private WalletServiceInterface $walletService;
 
-    public function __construct(TransactionServiceInterface $transactionInterface, WalletServiceInterface $walletServiceInterface)
+    public function __construct(TransactionServiceInterface $transactionService, WalletServiceInterface $walletService)
     {
-        $this->transactionService = $transactionInterface;
-        $this->walletService = $walletServiceInterface;
+        $this->transactionService = $transactionService;
+        $this->walletService = $walletService;
     }
 
     public function index(): View

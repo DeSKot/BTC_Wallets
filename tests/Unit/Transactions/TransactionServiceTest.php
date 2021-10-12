@@ -7,6 +7,7 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use App\Services\Transactions\TransactionService;
+use Tests\TestAuthCase;
 
 class TransactionServiceTest extends TestCase
 {
@@ -15,25 +16,18 @@ class TransactionServiceTest extends TestCase
         parent::setUp();
         Artisan::call('migrate');
         Artisan::call('db:seed');
-        $this->transactionService = new TransactionService();
+        $this->transactionService = new TransactionService;
+        $this->testAuth           = new TestAuthCase;
     }
     /**
      * @return void
      */
-    public function test_show_getArrayOfAllWalletTransactionsOfUser_assertEquals()
+    public function test_show_getArrayOfAllWalletTransactionsOfUser()
     {
-        $auth = new class{
-            public $id;
-            public function __construct()
-            {
-                $this->id = 1;
-            }
-        };
-
         Transaction::factory()->count(5)->create();
-        Auth::shouldReceive('user')->once()->andReturn($auth);
+        Auth::shouldReceive('user')->once()->andReturn($this->testAuth);
 
-        $expectedResult = app(Transaction::class)->where('sender_Id',$auth->id)->get();
+        $expectedResult = app(Transaction::class)->where('sender_Id',$this->testAuth->id)->get();
         $testMethod = $this->transactionService->index();
 
         $this->assertEquals($expectedResult,$testMethod);
@@ -41,7 +35,7 @@ class TransactionServiceTest extends TestCase
     /**
      * @return void
      */
-    public function test_show_getArrayOfOneWalletTransactionsOfUser_assertEquals()
+    public function test_show_getArrayOfOneWalletTransactionsOfUser()
     {   //make variables
         $address = 'address';
         //make fake model

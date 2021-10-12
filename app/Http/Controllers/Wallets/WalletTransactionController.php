@@ -11,7 +11,6 @@ use App\Interfaces\Transactions\TransactionRecordInterface;
 
 class WalletTransactionController extends Controller
 {
-
     private WalletTransactionInterface $walletTransaction;
     private TransactionRecordInterface $transactionRecord;
 
@@ -20,6 +19,7 @@ class WalletTransactionController extends Controller
         $this->walletTransaction = $walletInterface;
         $this->transactionRecord = $transactionRecordInterface;
     }
+
     public function transactionInDB(Request $request, Transaction $transaction): RedirectResponse
     {
         $myWallet = $request->input('myWallet', '');

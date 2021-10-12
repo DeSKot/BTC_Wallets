@@ -7,28 +7,25 @@ use App\Interfaces\Currency\ExchangeCurrencyServiceInterface;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 use App\Exceptions\Wallet\ToManyWalletsException;
-use App\Interfaces\Currency\ExchangeCurrencyInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Ramsey\Uuid\Uuid;
-
 class WalletService implements WalletServiceInterface
 {
+  private ExchangeCurrencyServiceInterface $exchangeCurrencyService;
 
-  private ExchangeCurrencyServiceInterface $exchangeCurrency;
-
-  public function __construct(ExchangeCurrencyServiceInterface $exchangeCurrencyInterface)
+  public function __construct(ExchangeCurrencyServiceInterface $exchangeCurrencyService)
   {
-    $this->exchangeCurrency = $exchangeCurrencyInterface;
+    $this->exchangeCurrencyService = $exchangeCurrencyService;
   }
 
-
-  public function index(): mixed
+  public function index(): Collection
   {
     return Wallet::where('user_id', Auth::user()->id)->get();
   }
   
   public function show($address): array
   {
-    $currencyUSD = $this->exchangeCurrency->exchangeCurrency();
+    $currencyUSD = $this->exchangeCurrencyService->exchangeCurrency();
     $amountOfSatoshi = Wallet::where('address', $address)->value('amount_of_satoshi');
     $amountOfBtc = ((100 / 100000000) * $amountOfSatoshi) / 100;
     $amountOfUsd = $amountOfBtc * $currencyUSD;
@@ -41,11 +38,10 @@ class WalletService implements WalletServiceInterface
     ];
   }
 
-
   public function create(Wallet $wallet): void
   {
     $userID = Auth::user()->id;
-    $countOfWallets = count(Wallet::where('user_id', '=', $userID)->get());
+    $countOfWallets = Wallet::query()->where('user_id', '=', $userID)->count();
 
     throw_if($countOfWallets >= 10, ToManyWalletsException::class, 'У вас слишком много кошельков, дозволено максимум 10');
 

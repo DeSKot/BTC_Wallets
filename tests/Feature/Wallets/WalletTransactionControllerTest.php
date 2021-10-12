@@ -14,36 +14,29 @@ use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 use Mockery\MockInterface;
 use Illuminate\Support\Facades\Auth;
+use Tests\TestAuthCase;
 
 class WalletTransactionControllerTest extends TestCase
 {
-    public function setUp(): void{
-
+    public function setUp(): void
+    {
         parent::setUp();
         Artisan::call('migrate');
         Artisan::call('db:seed');
-         $this->walletTransactionMock       = $this->createMock(WalletTransactionInterface::class);
-         $this->transactionRecordMock       = $this->createMock(TransactionRecordInterface::class);
-         $this->requestMock                 = $this->createMock(Request::class);
-         $this->transactionMock             = $this->createMock(Transaction::class);
-         $this->request                     = new Request;
-         $this->walletTransactionController = new WalletTransactionController($this->walletTransactionMock,$this->transactionRecordMock);
+        $this->walletTransactionMock       = $this->createMock(WalletTransactionInterface::class);
+        $this->transactionRecordMock       = $this->createMock(TransactionRecordInterface::class);
+        $this->requestMock                 = $this->createMock(Request::class);
+        $this->transactionMock             = $this->createMock(Transaction::class);
+        $this->testAuth                    = new TestAuthCase;
+        $this->request                     = new Request;
+        $this->walletTransactionController = new WalletTransactionController($this->walletTransactionMock,$this->transactionRecordMock);
     }
     /** 
      * @return void
      */
     public function test_transactionInDbController()
     {
-
-        $auth = new class {
-            public $id;
-            public function __construct()
-            {
-                $this->id = 1;
-            }
-        };
-
-        Auth::shouldReceive('user')->andReturn($auth);
+        Auth::shouldReceive('user')->andReturn($this->testAuth);
 
         Wallet::factory()->create([
             'address' => 'abc'
@@ -61,28 +54,18 @@ class WalletTransactionControllerTest extends TestCase
         $this->transactionRecordMock->expects($this->once())->method('createInDB')->with('abc','asd', 123, $this->transactionMock);
         $this->walletTransactionMock->expects($this->once())->method('transactionInDB')->with('abc','asd', 123);
         $this->walletTransactionController->transactionInDB($requestMock,$this->transactionMock);
-        
+
         //test, route name is real
         $response = $this->post('/transaction');
         $response->assertStatus(302);
-
         $response->assertSessionHas('success', 'Транзакция успешно завершена');
     }
      /** 
      * @return void
      */
-    public function test_transactionInDbControllerException(){
-        
-        $auth = new class {
-            public $id;
-            public function __construct()
-            {
-                $this->id = 1;
-            }
-        };
-
-        Auth::shouldReceive('user')->andReturn($auth);
-
+    public function test_transactionInDbControllerException()
+    {
+        Auth::shouldReceive('user')->andReturn($this->testAuth);
         Wallet::factory()->create([
             'address' => 'abc'
         ]);
@@ -97,7 +80,6 @@ class WalletTransactionControllerTest extends TestCase
         });
 
         $response = $this->post('/transaction');
-
-        $response->assertSessionHas('error', 'Не достаточно BTC на кошельке.Пополните кошелек');
+        $response->assertSessionHas('error', 'Не достаточно Satoshi на кошельке.Пополните кошелек');
     }
 }

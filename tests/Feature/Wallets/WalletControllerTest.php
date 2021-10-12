@@ -8,6 +8,7 @@ use App\Interfaces\Currency\ExchangeCurrencyServiceInterface;
 use App\Interfaces\Wallets\WalletServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
+use Tests\TestAuthCase;
 
 class WalletControllerTest extends TestCase
 {
@@ -19,32 +20,23 @@ class WalletControllerTest extends TestCase
         $this->walletServiceMock    = $this->createMock(WalletServiceInterface::class);
         $this->wallet               = $this->createMock(Wallet::class);
         $this->walletController     = new WalletController($this->walletServiceMock, $this->exchangeCurrencyMock);
+        $this->testAuth             = new TestAuthCase;
     }
     /**
      *
      * @return void
      */
     public function test_indexScreenCanBeRendered()
-    {   
+    {
         ob_end_flush();
-        
-        $auth = new class {
-            public $id;
-            public function __construct()
-            {
-                $this->id = 1;
-            }
-        };
-        Auth::shouldReceive('user')->once()->andReturn($auth);
+        Auth::shouldReceive('user')->once()->andReturn($this->testAuth);
         //testing route name is real
         $response = $this->get('/wallets');
         $response->assertStatus(200);
-
         //test call this methodes in testing method
         $this->walletServiceMock->expects($this->once())->method('index');
         $this->exchangeCurrencyMock->expects($this->once())->method('exchangeCurrency');
         $this->walletController->index();
-
         //test use info from the methode on the page 
             
         $view = $this->view('wallets.allWallets', [
@@ -69,25 +61,21 @@ class WalletControllerTest extends TestCase
     /**
      * @return void
      */
-    public function test_showScreenCanBeRendered(){
-
+    public function test_showScreenCanBeRendered()
+    {
         ob_get_clean();
-
          $this->walletServiceMock->method('show')->willReturn([
             'amountOfSatoshi' => 100000,
             'amountOfUsd'     => 4500000,
             'amountOfBtc'     => 1,
             'address'         => 'abc'
         ]);
-
         //test, call service method "show" in WalletController show method 
          $this->walletServiceMock->expects($this->once())->method('show')->with('abc');
          $this->walletController->show('abc');
-
         //test, route name is real
         $response = $this->get("/wallets/abc");
         $response->assertStatus(200);
-
         //test, use info from the methode on the page 
         $view = $this->view('wallets.oneWallet',[
             'address'         => 'abc',
@@ -107,20 +95,12 @@ class WalletControllerTest extends TestCase
     /**
      * @return void
      */
-    public function test_create_ScreenCanBeRendered(){
-        $auth = new class {
-            public $id;
-
-            public function __construct()
-            {
-                $this->id = 1;
-            }
-        };
-        Auth::shouldReceive('user')->once()->andReturn($auth);
+    public function test_create_ScreenCanBeRendered()
+    {
+        Auth::shouldReceive('user')->once()->andReturn($this->testAuth);
         //test route name is real
         $response = $this->get('/create_wallet');
         $response->assertStatus(302);
-
         //test call service method "create" in WalletController create method 
         $this->walletServiceMock->expects($this->once())->method('create')->with($this->wallet);
         $this->walletController->create($this->wallet);
@@ -130,16 +110,9 @@ class WalletControllerTest extends TestCase
     /**
      * @return void
      */
-    public function test_create_ScreenCanBeRendered_Exception(){
-                $auth = new class {
-            public $id;
-
-            public function __construct()
-            {
-                $this->id = 1;
-            }
-        };
-        Auth::shouldReceive('user')->once()->andReturn($auth);
+    public function test_create_ScreenCanBeRendered_Exception()
+    {
+        Auth::shouldReceive('user')->once()->andReturn($this->testAuth);
         Wallet::factory()->count(10)->create([
             'user_id' => 1
         ]);

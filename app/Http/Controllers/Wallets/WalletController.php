@@ -9,26 +9,22 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use App\Models\Wallet;
 
-
-
-
 class WalletController extends Controller
 {
     private WalletServiceInterface $walletService;
-    private ExchangeCurrencyServiceInterface $exchangeCurrency;
+    private ExchangeCurrencyServiceInterface $exchangeCurrencyService;
 
-    public function __construct(WalletServiceInterface $walletServiceInterface, ExchangeCurrencyServiceInterface $exchangeCurrencyInterface)
+    public function __construct(WalletServiceInterface $walletService, ExchangeCurrencyServiceInterface $exchangeCurrencyService)
     {
-        $this->walletService = $walletServiceInterface;
-        $this->exchangeCurrency = $exchangeCurrencyInterface;
+        $this->walletService = $walletService;
+        $this->exchangeCurrencyService = $exchangeCurrencyService;
     }
-
 
     public function index(): View
     {
         return view('wallets.allWallets', [
             'allWallets' => $this->walletService->index(),
-            'currencyUSD' => $this->exchangeCurrency->exchangeCurrency(),
+            'currencyUSD' => $this->exchangeCurrencyService->exchangeCurrency(),
         ]);
     }
 

@@ -8,6 +8,7 @@ use App\Exceptions\Transaction\NotEnoughMoneyException;
 use App\Exceptions\Transaction\InvalidAddressException;
 use App\Exceptions\Transaction\CanNotSendZeroException;
 use App\Exceptions\Transaction\CannotSendToTheSameWalletException;
+use Illuminate\Support\Facades\DB;
 
 class WalletTransaction implements WalletTransactionInterface
 {
@@ -18,8 +19,11 @@ class WalletTransaction implements WalletTransactionInterface
     throw_if($myWallet == $recipientWallet, CannotSendToTheSameWalletException::class, 'Нельзя отправить BTC на тот же кошелек');
     throw_if($amountOfBTC == 0, CanNotSendZeroException::class, 'Невозможно отправить ноль BTC');
 
+    DB::transaction(function () use($myWallet, $recipientWallet, $amountOfBTC)
+    {
+    Wallet::whereIn('address', [$myWallet, $recipientWallet])->lockForUpdate();
     $percent = $amountOfBTC * 0.15 + $amountOfBTC;
-    $wallets = Wallet::whereIn('address', [$myWallet, $recipientWallet])->sharedLock()->get();
+    $wallets = Wallet::whereIn('address', [$myWallet, $recipientWallet])->get();
     $myWalletData = $wallets[0];
     $recipientWalletData = $wallets[1];
 
@@ -27,14 +31,17 @@ class WalletTransaction implements WalletTransactionInterface
     $userIdOfSender = $myWalletData["user_id"];
     $userIdOfRecipient = $recipientWalletData["user_id"];
 
-    if ($userIdOfSender !== $userIdOfRecipient) {
-      throw_if($amountOfMyBTC - $percent < 0, NotEnoughMoneyException::class, 'Не достаточно BTC на кошельке.Пополните кошелек');
+    if ($userIdOfSender !== $userIdOfRecipient) 
+    {
+      throw_if($amountOfMyBTC - $percent < 0, NotEnoughMoneyException::class, 'Не достаточно Satoshi на кошельке.Пополните кошелек');
       Wallet::where('address', $myWallet)->decrement('amount_of_satoshi', $amountOfBTC + $percent);
       Wallet::where('address', $recipientWallet)->increment('amount_of_satoshi', $amountOfBTC);
-    } else {
-      throw_if($amountOfMyBTC - $amountOfBTC < 0, NotEnoughMoneyException::class, 'Не достаточно BTC на кошельке.Пополните кошелек');
+    } else 
+    {
+      throw_if($amountOfMyBTC - $amountOfBTC < 0, NotEnoughMoneyException::class, 'Не достаточно Satoshi на кошельке.Пополните кошелек');
       Wallet::where('address', $myWallet)->decrement('amount_of_satoshi', $amountOfBTC);
       Wallet::where('address', $recipientWallet)->increment('amount_of_satoshi', $amountOfBTC);
     }
+    });
   }
 }
