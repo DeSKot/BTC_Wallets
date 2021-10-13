@@ -21,9 +21,8 @@ class WalletTransaction implements WalletTransactionInterface
 
     DB::transaction(function () use($myWallet, $recipientWallet, $amountOfBTC)
     {
-    Wallet::whereIn('address', [$myWallet, $recipientWallet])->lockForUpdate();
     $percent = $amountOfBTC * 0.15 + $amountOfBTC;
-    $wallets = Wallet::whereIn('address', [$myWallet, $recipientWallet])->get();
+    $wallets = Wallet::whereIn('address', [$myWallet, $recipientWallet])->lockForUpdate()->get();
     $myWalletData = $wallets[0];
     $recipientWalletData = $wallets[1];
 
